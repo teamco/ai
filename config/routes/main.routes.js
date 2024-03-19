@@ -15,7 +15,7 @@ const MAIN_ROUTES = (mainPath = '') => {
       {
         exact: true,
         path: `${mainPath}/`,
-        redirect: '/ai'
+        redirect: '/ex/ai'
       },
       adminRoutes,
       ...mainErrors

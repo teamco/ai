@@ -61,7 +61,7 @@ const __config__ = {
   },
   manifest: {},
   favicons: [
-    '/assets/favicon.png',
+    '/assets/favicon.png'
     // '/assets/favicon-16x16.png',
     // '/assets/favicon-32x32.png'
   ],
@@ -95,7 +95,9 @@ const __config__ = {
   },
   deadCode: {},
   extraBabelPlugins: [],
-  headScripts: [],
+  headScripts: [
+    '/particles.min.js'
+  ],
   links: [],
   metas: [],
   plugins: [

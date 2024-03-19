@@ -10,7 +10,7 @@ import { menus } from '@/services/menu.service';
 import { getSiderPanel } from '@/utils/panel';
 
 const appMeta = {
-  name: 'Flip',
+  name: 'GenAI-Driven Augmentation of Corporate Internal Communication',
   charSet: 'utf-8'
 };
 
@@ -78,7 +78,7 @@ export default dvaModelExtend(commonModel, {
 
     * query({ payload }, { put }) {
       yield put({ type: 'updateState', payload: { menus } });
-      yield put({ type: 'adminLayout', payload: { visible: true } });
+      yield put({ type: 'adminLayout', payload: { visible: false } });
     },
 
     * adminLayout({ payload }, { put }) {

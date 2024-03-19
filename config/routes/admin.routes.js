@@ -18,9 +18,9 @@ const ADMIN_ROUTES = (adminPath = '/ex') => {
     routes: [
       {
         exact: true,
-        path: `${adminPath}/cards`,
-        component: '@/pages/cards',
-        breadcrumb: 'route.cards',
+        path: `${adminPath}/ai`,
+        component: '@/pages/ai',
+        breadcrumb: 'route.ai',
         wrappers
       },
       ...adminErrors

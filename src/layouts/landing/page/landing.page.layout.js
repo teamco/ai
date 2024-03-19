@@ -1,11 +1,9 @@
 import React from 'react';
 import { Layout, Spin } from 'antd';
 
-import HeaderSection from '@/pages/landing/sections/header.section';
 
 import { isSpinning } from '@/utils/state';
 
-import styles from '@/pages/landing/landing.module.less';
 import stylesPage from '@/layouts/landing/page/landing.page.layout.module.less';
 
 const { Content } = Layout;
@@ -51,10 +49,9 @@ export const LandingPage = (props) => {
 
   return (
       <Spin spinning={isSpinning(loading, spinEffects, loading.effects['landingModel/query'])}>
-        <Layout className={styles.landing}>
+        <Layout>
           <Content>
-            <div className={styles.page}>
-              <HeaderSection {...headerProps} />
+            <div>
               <div className={pageStyles}>
                 {props.children}
               </div>

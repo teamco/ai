@@ -153,13 +153,13 @@ function toBase64(file) {
 
 /**
  * @function
- * @param {boolean} notice
+ * @param {boolean} [notice]
  * @param opts
  * @param [errorHandler]
  * @param [fallbackUrl]
  * @return {Q.Promise<any> | undefined}
  */
-function xhr(opts, notice, errorHandler = stub, fallbackUrl = true) {
+function xhr(opts, notice = false, errorHandler = stub, fallbackUrl = true) {
   const { pathname } = window.location;
   const { url, method } = opts;
   delete opts.url;
