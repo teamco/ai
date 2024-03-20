@@ -33,6 +33,15 @@ const mapDispatchToProps = (dispatch) => ({
   onPromptsWithSources() {
     dispatch({ type: `${MODEL_NAME}/prompts_with_sources` });
   },
+  onLogs() {
+    dispatch({ type: `${MODEL_NAME}/logs` });
+  },
+  onShared() {
+    dispatch({ type: `${MODEL_NAME}/all_docs` });
+  },
+  onUserInfo(username) {
+    dispatch({ type: `${MODEL_NAME}/documents_of_user`, payload: { username } });
+  },
   onNotification() {
   }
 });

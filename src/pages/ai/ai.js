@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useState } from 'react';
 import { Button, FloatButton, Modal, Spin, Table } from 'antd';
-import { TagOutlined, WechatOutlined } from '@ant-design/icons';
+import { WechatOutlined } from '@ant-design/icons';
 import classnames from 'classnames';
 
 import { stub } from '@/utils/function';
@@ -9,7 +9,15 @@ import Chat from './chat';
 
 import { particleMock } from '@/pages/ai/particle.mock';
 
+import { peopleColumns } from '@/pages/ai/columns/people';
+import { sourcesColumns } from '@/pages/ai/columns/sources';
+import { knowledgeColumns } from '@/pages/ai/columns/knowledge';
+import { userDocsColumns } from '@/pages/ai/columns/userDocs';
+import { logsColumns } from '@/pages/ai/columns/logs';
+import { costColumns } from '@/pages/ai/columns/cost';
+
 import styles from './ai.module.less';
+import { sharedColumns } from '@/pages/ai/columns/shared';
 
 const MODEL_NAME = 'aiModel';
 
@@ -20,6 +28,9 @@ const Ai = props => {
     onAskAi = stub,
     onBestPeople = stub,
     onPromptsWithSources = stub,
+    onLogs = stub,
+    onUserInfo = stub,
+    onShared = stub,
     onBestKnowledge = stub
   } = props;
 
@@ -34,7 +45,12 @@ const Ai = props => {
     answers = [],
     people = [],
     sources = [],
-    knowledge = []
+    knowledge = [],
+    userDocs = [],
+    logs = [],
+    costs = [],
+    shared = [],
+    particles
   } = aiModel;
 
   const rnd = (min, max) => {
@@ -44,156 +60,93 @@ const Ai = props => {
   const [circle1, setCircle1] = useState({ dims: 50, top: '50%', left: '50%' });
   const [circle2, setCircle2] = useState({ dims: 50, top: '50%', left: '50%' });
   const [circle3, setCircle3] = useState({ dims: 50, top: '50%', left: '50%' });
+  const [circle4, setCircle4] = useState({ dims: 50, top: '50%', left: '50%' });
+  const [circle5, setCircle5] = useState({ dims: 50, top: '50%', left: '50%' });
+  const [circle6, setCircle6] = useState({ dims: 50, top: '50%', left: '50%' });
 
   useEffect(() => {
-    window.particlesJS('particles-js', particleMock);
+    particles && window.particlesJS('particles-js', particleMock);
     setCircle1({
       dims: rnd(200, 300),
-      top: rnd(200, 400),
-      left: rnd(200, 300)
+      top: 100,
+      left: 300
     });
 
     setCircle2({
       dims: rnd(200, 300),
-      top: rnd(100, 300),
-      left: rnd(500, 600)
+      top: 300,
+      left: 500
     });
 
     setCircle3({
       dims: rnd(200, 300),
-      top: rnd(100, 400),
-      left: rnd(800, 960)
+      top: 100,
+      left: 700
+    });
+
+    setCircle4({
+      dims: rnd(200, 300),
+      top: 500,
+      left: 600
+    });
+
+    setCircle5({
+      dims: rnd(200, 300),
+      top: 400,
+      left: 800
+    });
+
+    setCircle6({
+      dims: rnd(200, 300),
+      top: 200,
+      left: 900
     });
 
   }, [window.particlesJS]);
 
   useEffect(() => {
-    knowledge.length && setModalContent({
-      knowledge: {
-        data: knowledge,
-        columns: [
-          {
-            title: 'Name',
-            dataIndex: 'username',
-            key: 'username',
-            width: 200,
-            render(username, record) {
-              return (
-                  <div>
-                    <strong>{username}</strong><br/>
-                    {record.email}<br/>
-                  </div>
-              );
-            }
-          },
-          {
-            title: 'Text',
-            dataIndex: 'body',
-            key: 'body',
-            render(body, record) {
-              return (
-                  <div>
-                    {record.subject}
-                    {/*<pre>{body}</pre>*/}
-                  </div>
-              );
-            }
-          },
-          {
-            title: 'Created At',
-            dataIndex: 'created_date',
-            key: 'created_date',
-            width: 250,
-            render(created_date) {
-              const date = new Date(created_date);
-              return (
-                  <div>
-                    {date.toLocaleDateString('en-US')} {date.toLocaleTimeString('en-US')}
-                  </div>
-              );
-            }
-          },
-          {
-            title: 'Score',
-            dataIndex: 'score',
-            key: 'score',
-            width: 70
-          }
-        ]
-      }
-    });
-  }, [knowledge.length]);
+    knowledge.length && setModalContent(knowledgeColumns({
+      data: knowledge
+    }));
+  }, [knowledge]);
 
   useEffect(() => {
-    people.length && setModalContent({
-      people: {
-        data: people,
-        columns: [
-          {
-            title: 'Name',
-            dataIndex: 'username',
-            key: 'username'
-          },
-          {
-            title: 'Score',
-            dataIndex: 'score',
-            key: 'score',
-            width: 70
-          }
-        ]
-      }
-    });
-  }, [people.length]);
+    people.length && setModalContent(peopleColumns({
+      data: people,
+      onClick: onUserInfo
+    }));
+  }, [people]);
 
   useEffect(() => {
-    sources.length && setModalContent({
-      sources: {
-        data: sources,
-        columns: [
-          {
-            title: 'Prompt',
-            dataIndex: 'prompt',
-            key: 'prompt'
-          },
-          {
-            title: 'Asked At',
-            dataIndex: 'asked_date',
-            key: 'asked_date',
-            width: 250,
-            render(asked_date) {
-              const date = new Date(asked_date);
-              return (
-                  <div>
-                    {date.toLocaleDateString('en-US')} {date.toLocaleTimeString('en-US')}
-                  </div>
-              );
-            }
-          },
-          {
-            title: 'Sources',
-            dataIndex: 'sources',
-            key: 'sources',
-            render(sources = []) {
-              return (
-                  <ul>
-                    {sources?.map((s, idx) => (
-                        <li key={idx}>
-                          Expert name: {s.username}<br/>
-                          Score: {s.score}<br/>
-                          <div onClick={() => {
+    sources.length && setModalContent(sourcesColumns({
+      data: sources
+    }));
+  }, [sources]);
 
-                          }}><TagOutlined/>{s.subject}</div>
-                        </li>
-                    ))}
-                  </ul>
-              );
-            }
-          }
-        ]
-      }
-    });
-  }, [sources.length]);
-console.log(sources)
+  useEffect(() => {
+    logs.length && setModalContent(logsColumns({
+      data: logs
+    }));
+  }, [logs]);
+
+  useEffect(() => {
+    shared.length && setModalContent(sharedColumns({
+      data: shared
+    }));
+  }, [shared]);
+
+  useEffect(() => {
+    if (userDocs.length) {
+      setModalContent(userDocsColumns({
+        data: userDocs
+      }));
+      setIsModalOpen(true);
+      setModalTitle(`${userDocs[0]?.username} Shared Knowledge`);
+      setModalType('userDocs');
+      setModalStyle(styles.modal4);
+    }
+  }, [userDocs]);
+
   return (
       <div className={styles.aiWrapper}>
         <div id={'particles-js'} className={styles.particles}/>
@@ -212,24 +165,59 @@ console.log(sources)
           <div className={classnames(styles.circle, styles.pulse2)}
                onClick={() => {
                  setIsModalOpen(true);
-                 setModalTitle('Best People');
+                 setModalTitle('Expert Champions');
                  setModalType('people');
                  setModalStyle(styles.modal2);
                  onBestPeople();
                }}
                style={{ width: circle2.dims, height: circle2.dims, top: circle2.top, left: circle2.left }}>
-            Best People
+            Best Experts
           </div>
           <div className={classnames(styles.circle, styles.pulse3)}
                onClick={() => {
                  setIsModalOpen(true);
-                 setModalTitle('Prompts with Sources');
+                 setModalTitle('ASK Prompts');
                  setModalType('sources');
                  setModalStyle(styles.modal3);
                  onPromptsWithSources();
                }}
                style={{ width: circle3.dims, height: circle3.dims, top: circle3.top, left: circle3.left }}>
-            Prompts with Sources
+            ASKed Questions
+          </div>
+          <div className={classnames(styles.circle, styles.pulse4)}
+               onClick={() => {
+                 setIsModalOpen(true);
+                 setModalTitle('Activities Log');
+                 setModalType('logs');
+                 setModalStyle(styles.modal4);
+                 onLogs();
+               }}
+               style={{ width: circle4.dims, height: circle4.dims, top: circle4.top, left: circle4.left }}>
+            Activities Log
+          </div>
+          <div className={classnames(styles.circle, styles.pulse5)}
+               onClick={() => {
+                 setIsModalOpen(true);
+                 setModalTitle('Knowledge Cost Performance');
+                 setModalType('cost');
+                 setModalStyle(styles.modal5);
+                 setModalContent(costColumns({
+                   data: costs
+                 }))
+               }}
+               style={{ width: circle5.dims, height: circle5.dims, top: circle5.top, left: circle5.left }}>
+            Cost Performance
+          </div>
+          <div className={classnames(styles.circle, styles.pulse6)}
+               onClick={() => {
+                 setIsModalOpen(true);
+                 setModalTitle('Shared Knowledge');
+                 setModalType('shared');
+                 setModalStyle(styles.modal6);
+                 onShared();
+               }}
+               style={{ width: circle6.dims, height: circle6.dims, top: circle6.top, left: circle6.left }}>
+            Shared Knowledge
           </div>
         </div>
         <Chat chatVisible={chatVisible}
@@ -254,7 +242,10 @@ console.log(sources)
           <Spin spinning={!!(
               loading.effects[`${MODEL_NAME}/best_knowledge`] ||
               loading.effects[`${MODEL_NAME}/best_people`] ||
-              loading.effects[`${MODEL_NAME}/prompts_with_sources`]
+              loading.effects[`${MODEL_NAME}/prompts_with_sources`] ||
+              loading.effects[`${MODEL_NAME}/all_docs`] ||
+              loading.effects[`${MODEL_NAME}/logs`] ||
+              loading.effects[`${MODEL_NAME}/documents_of_user`]
           )}>
             {modalContent?.[modalType]?.data ? (
                 <Table dataSource={modalContent?.[modalType]?.data}

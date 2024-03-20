@@ -22,9 +22,30 @@ export const bestPeople = async () => {
   });
 };
 
+export const allDocs = async () => {
+  return request.xhr({
+    url: '/amaik/all_docs',
+    method: request.METHOD.get
+  });
+};
+
 export const promptsWithSources = async () => {
   return request.xhr({
     url: '/amaik/prompts_with_sources',
+    method: request.METHOD.get
+  });
+};
+
+export const activitiesLogs = async () => {
+  return request.xhr({
+    url: '/amaik/logs',
+    method: request.METHOD.get
+  });
+};
+
+export const documentsOfUser = async ({ username }) => {
+  return request.xhr({
+    url: `/amaik/documents_of_user/${username}`,
     method: request.METHOD.get
   });
 };

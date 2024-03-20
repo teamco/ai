@@ -10,6 +10,8 @@ module.exports = {
     [`/amaik/ask`]: { ...proxyPops },
     [`/amaik/best_knowledge`]: { ...proxyPops },
     [`/amaik/add`]: { ...proxyPops },
+    [`/amaik/logs`]: { ...proxyPops },
+    [`/amaik/all_docs`]: { ...proxyPops },
     [`/amaik/get_doc_by_id`]: { ...proxyPops },
     [`/amaik/best_people`]: { ...proxyPops },
     [`/amaik/documents_of_user`]: { ...proxyPops },

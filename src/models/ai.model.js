@@ -3,7 +3,14 @@ import dvaModelExtend from 'dva-model-extend';
 
 import { commonModel } from '@/models/common.model';
 
-import { askAi, bestKnowledge, bestPeople, promptsWithSources } from '@/services/ai.service';
+import {
+  activitiesLogs, allDocs,
+  askAi,
+  bestKnowledge,
+  bestPeople,
+  documentsOfUser,
+  promptsWithSources
+} from '@/services/ai.service';
 
 const MODEL_NAME = 'aiModel';
 
@@ -17,7 +24,41 @@ export default dvaModelExtend(commonModel, {
     answers: [],
     people: [],
     sources: [],
-    knowledge: []
+    knowledge: [],
+    userDocs: [],
+    logs: [],
+    shared: [],
+    costs: [
+      {
+        unit: 'ACEU',
+        month: '1,023.34',
+        year: '12,345.35',
+        ask: '5,030',
+        add: '1,304'
+      },
+      {
+        unit: 'amAIz',
+        month: '10,298.55',
+        year: '150,360.38',
+        ask: '60,034',
+        add: '6,303'
+      },
+      {
+        unit: 'DCDC',
+        month: '200.44',
+        year: '1,060.58',
+        ask: '1,002',
+        add: '1,994'
+      },
+      {
+        unit: 'PEBU',
+        month: '400.35',
+        year: '3,305.12',
+        ask: '3,004',
+        add: '5,959'
+      }
+    ],
+    particles: true
   },
 
   subscriptions: {
@@ -36,7 +77,8 @@ export default dvaModelExtend(commonModel, {
         data: {
           username: 'pavel',
           context: '',
-          question
+          question,
+          sensitivity: 'personal'
         }
       });
 
@@ -61,9 +103,18 @@ export default dvaModelExtend(commonModel, {
       yield put({
         type: 'updateState',
         payload: {
-          knowledge: [...data],
-          sources: [],
-          people: []
+          knowledge: [...data]
+        }
+      });
+    },
+
+    * logs({ payload = {} }, { put, call, select }) {
+      const { data } = yield call(activitiesLogs);
+
+      yield put({
+        type: 'updateState',
+        payload: {
+          logs: [...data]
         }
       });
     },
@@ -74,9 +125,7 @@ export default dvaModelExtend(commonModel, {
       yield put({
         type: 'updateState',
         payload: {
-          people: [...data],
-          sources: [],
-          knowledge: []
+          people: [...data]
         }
       });
     },
@@ -87,9 +136,29 @@ export default dvaModelExtend(commonModel, {
       yield put({
         type: 'updateState',
         payload: {
-          sources: [...data],
-          people: [],
-          knowledge: []
+          sources: [...data]
+        }
+      });
+    },
+
+    * documents_of_user({ payload = {} }, { put, call }) {
+      const { data } = yield call(documentsOfUser, {username: payload.username});
+
+      yield put({
+        type: 'updateState',
+        payload: {
+          userDocs: [...data]
+        }
+      });
+    },
+
+    * all_docs({ payload = {} }, { put, call }) {
+      const { data } = yield call(allDocs);
+
+      yield put({
+        type: 'updateState',
+        payload: {
+          shared: [...data]
         }
       });
     }
